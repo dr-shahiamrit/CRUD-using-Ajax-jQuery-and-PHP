@@ -17,25 +17,25 @@
 
     // only for insert ///////////////////////////////
 
-    $data = stripslashes(file_get_contents("php://input"));
-    $mydata = json_decode($data, true);
+    // $data = stripslashes(file_get_contents("php://input"));
+    // $mydata = json_decode($data, true);
 
-    $name = $mydata["name"];
-    $email = $mydata["email"];
-    $password = $mydata["password"];
+    // $name = $mydata["name"];
+    // $email = $mydata["email"];
+    // $password = $mydata["password"];
 
-    // To insert into the database
+    // // To insert into the database
 
-    if(!empty($name) && !empty($email) && !empty($password)) {
-        $sql = "INSERT INTO student(name, email, password) VALUES ('$name', '$email', '$password')";
-        if($conn->query($sql) == TRUE) {
-            echo "Student Saved Successfully";
-        } else {
-            echo "Unable to Save Student";
-        }
-    } else {
-        echo "Fill All Fields";
-    }
+    // if(!empty($name) && !empty($email) && !empty($password)) {
+    //     $sql = "INSERT INTO student(name, email, password) VALUES ('$name', '$email', '$password')";
+    //     if($conn->query($sql) == TRUE) {
+    //         echo "Student Saved Successfully";
+    //     } else {
+    //         echo "Unable to Save Student";
+    //     }
+    // } else {
+    //     echo "Fill All Fields";
+    // }
 
     // only for insert end //////////////////
 
@@ -44,16 +44,9 @@
 
 
 
+/*
 
 
-
-
-
-
-
-
-
-    /*
     // insert and update both start
 
     $data = stripslashes(file_get_contents("php://input"));
@@ -80,8 +73,46 @@
     }
 
     // insert and update both end
-
 */
+
+
+
+
+// insert and update both start
+
+$data = stripslashes(file_get_contents("php://input"));
+$mydata = json_decode($data, true);
+
+$name = $mydata["name"];
+$email = $mydata["email"];
+$password = $mydata["password"];
+$id = isset($mydata['id']) ? $mydata['id'] : null; // Make sure id is set for updates
+
+// Check if all fields are filled
+if(!empty($name) && !empty($email) && !empty($password)) {
+    // Prepare statement to avoid SQL injection
+    $stmt = $conn->prepare("INSERT INTO student(id, name, email, password) VALUES (?, ?, ?, ?) 
+                            ON DUPLICATE KEY UPDATE name=VALUES(name), email=VALUES(email), password=VALUES(password)");
+    // Bind parameters (s - string, i - integer)
+    $stmt->bind_param("isss", $id, $name, $email, $password);
+    
+    // Execute the query and check if successful
+    if($stmt->execute()) {
+        echo "Student Saved Successfully";
+    } else {
+        echo "Unable to Save Student: " . $stmt->error;
+    }
+    
+    // Close the statement
+    $stmt->close();
+} else {
+    echo "Fill All Fields";
+}
+
+// insert and update both end
+
+
+
 
 ?>
 
