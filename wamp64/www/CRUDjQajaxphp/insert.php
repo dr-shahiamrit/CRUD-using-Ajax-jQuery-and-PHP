@@ -17,30 +17,43 @@
 
     // only for insert ///////////////////////////////
 
-    // $data = stripslashes(file_get_contents("php://input"));
-    // $mydata = json_decode($data, true);
+    $data = stripslashes(file_get_contents("php://input"));
+    $mydata = json_decode($data, true);
 
-    // $name = $mydata["name"];
-    // $email = $mydata["email"];
-    // $password = $mydata["password"];
+    $name = $mydata["name"];
+    $email = $mydata["email"];
+    $password = $mydata["password"];
 
-    // // To insert into the database
+    // To insert into the database
 
-    // if(!empty($name) && !empty($email) && !empty($password)) {
-    //     $sql = "INSERT INTO student(name, email, password) VALUES ('$name', '$email', '$password')";
-    //     if($conn->query($sql) == TRUE) {
-    //         echo "Student Saved Successfully";
-    //     } else {
-    //         echo "Unable to Save Student";
-    //     }
-    // } else {
-    //     echo "Fill All Fields";
-    // }
+    if(!empty($name) && !empty($email) && !empty($password)) {
+        $sql = "INSERT INTO student(name, email, password) VALUES ('$name', '$email', '$password')";
+        if($conn->query($sql) == TRUE) {
+            echo "Student Saved Successfully";
+        } else {
+            echo "Unable to Save Student";
+        }
+    } else {
+        echo "Fill All Fields";
+    }
 
     // only for insert end //////////////////
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     // insert and update both start
 
     $data = stripslashes(file_get_contents("php://input"));
@@ -68,7 +81,7 @@
 
     // insert and update both end
 
-
+*/
 
 ?>
 
